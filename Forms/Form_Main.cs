@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.ComponentModel;
-using AddressBookMVPDEMO.Properties;
 using AddressBookMVPDEMO.Views;
 using AddressBookMVPDEMO.Models;
 using AddressBookMVPDEMO.Presenters;
@@ -70,7 +69,7 @@ namespace AddressBookMVPDEMO
         private void button_LoadList_Click(object sender, EventArgs e)
         {
             if (OpenOpenFileDialog() == DialogResult.OK)
-                presenter.LoadXML(ofd.FileName);
+                presenter.LoadXML(ofd.FileName);s
         }
 
         #endregion
