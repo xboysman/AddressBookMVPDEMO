@@ -68,7 +68,7 @@ namespace AddressBookMVPDEMO
         private void button_LoadList_Click(object sender, EventArgs e)
         {
             if (OpenOpenFileDialog() == DialogResult.OK)
-                presenter.LoadXML(ofd.FileName);s
+                presenter.LoadXML(ofd.FileName);
         }
 
         #endregion
