@@ -5,7 +5,6 @@ using AddressBookMVPDEMO.Views;
 using AddressBookMVPDEMO.Models;
 using AddressBookMVPDEMO.Presenters;
 
-
 namespace AddressBookMVPDEMO
 {
     public partial class Form_Main : Form, IMainView
