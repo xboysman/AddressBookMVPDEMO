@@ -203,7 +203,7 @@ namespace AddressBookMVPDEMO
             this.MinimumSize = new System.Drawing.Size(465, 380);
             this.Name = "Form_Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Kontakty";
+            this.Text = "Address Book";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_Main_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
