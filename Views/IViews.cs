@@ -1,6 +1,6 @@
-﻿using System;
+﻿using AddressBookMVPDEMO.Models;
+using System;
 using System.ComponentModel;
-using AddressBookMVPDEMO.Models.Interfaces;
 
 namespace AddressBookMVPDEMO.Views
 {
@@ -12,8 +12,8 @@ namespace AddressBookMVPDEMO.Views
 
     public interface IMainView 
     {
-        BindingList<IPersonModel> Persons { set; }
-        IPersonModel SelectedPerson { get; set; }
+        BindingList<PersonModel> Persons { set; }
+        PersonModel SelectedPerson { get; set; }
         DateTime Birthday { set; }
         string TodayDate { set; }
         string NearestBirthday { set; }

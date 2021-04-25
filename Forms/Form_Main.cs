@@ -3,33 +3,67 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using AddressBookMVPDEMO.Views;
 using AddressBookMVPDEMO.Presenters;
-using AddressBookMVPDEMO.Models.Interfaces;
+using AddressBookMVPDEMO.Properties;
+using AddressBookMVPDEMO.Models;
 
 namespace AddressBookMVPDEMO
 {
     public partial class Form_Main : Form, IMainView
     {
+        #region Form
         private PersonPresenter presenter;
-
+        #region Constructor(s)
         public Form_Main()
         {
             InitializeComponent();
             presenter = new PersonPresenter(this);
-            if (presenter.FileExists(presenter.FilePath))
-                presenter.LoadXML(presenter.FilePath);
+
+            if (Settings.Default.SaveFilePath != string.Empty)
+                if (presenter.FileExists(Settings.Default.SaveFilePath))
+                    presenter.LoadTxt(presenter.FilePath);
+
             presenter.UpdateUI();
         }
+        #endregion
+        private void Form_Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (presenter.HasChanged)
+            {
+                DialogResult dr = MessageBox.Show("Save list of people?", "Save"
+                                                       , MessageBoxButtons.YesNoCancel
+                                                       , MessageBoxIcon.Question
+                                                       , MessageBoxDefaultButton.Button1);
+                switch (dr)
+                {
+                    case DialogResult.Yes:
+                        if (Settings.Default.SaveFilePath == string.Empty)
+                        {
+                            Settings.Default.SaveFilePath = presenter.FilePath;
+                            Settings.Default.Save();
+                        }
+
+                        presenter.SaveToTxt(Settings.Default.SaveFilePath);
+                        break;
+                    case DialogResult.No:
+                        e.Cancel = false;
+                        break;
+                    default:
+                        e.Cancel = true;
+                        break;
+                }                    
+            }
+        }
+        #endregion
 
         #region View Properties
-
-        public IPersonModel SelectedPerson
-        {
-            get => (IPersonModel)listBox_ListPersons.SelectedItem;
-            set => listBox_ListPersons.SelectedItem = value;
-        }
-        public BindingList<IPersonModel> Persons
+        public BindingList<PersonModel> Persons
         {
             set => listBox_ListPersons.DataSource = value;
+        }
+        public PersonModel SelectedPerson
+        {
+            get => (PersonModel)listBox_ListPersons.SelectedItem;
+            set => listBox_ListPersons.SelectedItem = value;
         }
         public DateTime Birthday 
         { 
@@ -50,11 +84,9 @@ namespace AddressBookMVPDEMO
         public string TodayDate { set => label_TodayDate.Text = value; }
         public string NearestBirthday { set => label_NearestBirthday.Text = value; }
         public string Age { set => label_Age.Text = value; }
-
         #endregion
 
         #region Buttons
-
         private void button_Add_Click(object sender, EventArgs e)
         {
             Form_Person addPerson = new Form_Person(presenter);
@@ -68,13 +100,15 @@ namespace AddressBookMVPDEMO
         private void button_LoadList_Click(object sender, EventArgs e)
         {
             if (OpenOpenFileDialog() == DialogResult.OK)
-                presenter.LoadXML(ofd.FileName);
+            {
+                presenter.LoadTxt(ofd.FileName);
+                Settings.Default.SaveFilePath = ofd.FileName;
+                Settings.Default.Save();
+            }
         }
-
         #endregion
 
         #region listBox
-
         private void listBox_ListPersons_SelectedIndexChanged(object sender, EventArgs e)
         {
             presenter.SelectedPerson = this.SelectedPerson;
@@ -89,32 +123,9 @@ namespace AddressBookMVPDEMO
                 editPerson.ShowDialog();
             }
         }
-
-        #endregion
-
-        #region Form
-
-        private void Form_Main_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (presenter.HasChanged && listBox_ListPersons.Items.Count > 0)
-            {
-                DialogResult dr = MessageBox.Show("Save list of people?", "Save"
-                                                       , MessageBoxButtons.YesNoCancel
-                                                       , MessageBoxIcon.Question
-                                                       , MessageBoxDefaultButton.Button1);
-                if (dr == DialogResult.Yes)
-                    presenter.SaveToXML(presenter.FilePath);
-                else if (dr == DialogResult.No)
-                    e.Cancel = false;
-                else
-                    e.Cancel = true;
-            }
-        }
-
         #endregion
 
         #region File Dialogs
-
         private OpenFileDialog ofd;
         private DialogResult OpenOpenFileDialog()
         {
@@ -123,7 +134,6 @@ namespace AddressBookMVPDEMO
             ofd.InitialDirectory = presenter.SubFolderPath;
             return ofd.ShowDialog();
         }
-
         #endregion
     }
 }

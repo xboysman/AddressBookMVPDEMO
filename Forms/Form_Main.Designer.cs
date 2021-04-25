@@ -50,7 +50,6 @@ namespace AddressBookMVPDEMO
             this.monthCalendar1.Location = new System.Drawing.Point(264, 118);
             this.monthCalendar1.MaxSelectionCount = 1;
             this.monthCalendar1.Name = "monthCalendar1";
-            this.monthCalendar1.ShowToday = false;
             this.monthCalendar1.TabIndex = 0;
             // 
             // lbl_Today

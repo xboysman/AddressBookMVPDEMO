@@ -1,39 +1,30 @@
 ﻿using System;
-using System.Runtime.Serialization;
-using AddressBookMVPDEMO.Models.Interfaces;
 
 namespace AddressBookMVPDEMO.Models
 {
-    [Serializable()]
-    public class PersonModel : IPersonModel
+    public class PersonModel
     {
-        #region Property Fields
+        #region Property & Fields
         public string Name { get; set; }
         public DateTime Birthday { get; set; }
         #endregion
 
         #region Constructor(s)
-        public PersonModel() { }
         public PersonModel(string name, DateTime birthday)
         {
             this.Name = name;
             this.Birthday = birthday;
         }
-        public PersonModel(SerializationInfo info, StreamingContext context)
-        {
-            this.Name = (string)info.GetValue("Name", typeof(string));
-            this.Birthday = (DateTime)info.GetValue("Birthday", typeof(DateTime));
-        }
         #endregion
 
-        public IPersonModel CreateNewPerson(string name, DateTime birthday)
-        {
-            PersonModel person = new PersonModel(name, birthday);
-            return person;
-        }
+        #region Methods
         public int CalculateAge()
         {
             DateTime today = DateTime.Today;
+
+            if (today.Date == Birthday.Date)
+                return 0;
+
             int age = today.Year - Birthday.Year;
             if (today < Birthday.AddYears(age))
                 age--;
@@ -47,14 +38,10 @@ namespace AddressBookMVPDEMO.Models
 
             return Convert.ToInt32(differenceBirthday.TotalDays);
         }
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("Jmeno", this.Name);
-            info.AddValue("Narozeniny", this.Birthday);
-        }
         public override string ToString()
         {
             return Name;
         }
+        #endregion
     }
 }
