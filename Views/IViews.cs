@@ -10,9 +10,9 @@ namespace AddressBookMVPDEMO.Views
         DateTime Birthday { get; set; }
     }
 
-    public interface IMainView 
+    public interface IMainView
     {
-        BindingList<PersonModel> Persons { set; }
+        BindingList<PersonModel> Persons { get; set; }
         PersonModel SelectedPerson { get; set; }
         DateTime Birthday { set; }
         string TodayDate { set; }

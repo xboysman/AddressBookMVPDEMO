@@ -1,12 +1,37 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace AddressBookMVPDEMO.Models
 {
-    public class PersonModel
+    public class PersonModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         #region Property & Fields
-        public string Name { get; set; }
-        public DateTime Birthday { get; set; }
+        private string name;
+
+        public string Name
+        {
+            get { return name; }
+            set 
+            { 
+                name = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));
+            }
+        }
+
+        private DateTime birthday;
+
+        public DateTime Birthday
+        {
+            get { return birthday; }
+            set 
+            { 
+                birthday = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Birthday)));
+            }
+        }
+
         #endregion
 
         #region Constructor(s)
@@ -15,6 +40,7 @@ namespace AddressBookMVPDEMO.Models
             this.Name = name;
             this.Birthday = birthday;
         }
+
         #endregion
 
         #region Methods

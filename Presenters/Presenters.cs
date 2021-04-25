@@ -8,7 +8,7 @@ using AddressBookMVPDEMO.Models;
 
 namespace AddressBookMVPDEMO.Presenters
 {
-    public class PersonPresenter 
+    public class MainPresenter 
     {
         #region File/Folder Settings
         private const string subFolderName = "AddressBook";
@@ -22,11 +22,12 @@ namespace AddressBookMVPDEMO.Presenters
         public string FilePath { get => filePath; }
         #endregion
 
-        #region Property & Fields
+        #region Properties & Fields
         private readonly IMainView mainView;
         private BindingList<PersonModel> personsModel;
         private PersonModel selectedPerson;
         private bool preparing;
+
         private BindingList<PersonModel> PersonsModel
         {
             get => this.personsModel;
@@ -45,10 +46,10 @@ namespace AddressBookMVPDEMO.Presenters
         #endregion
 
         #region Constructor(s)
-        public PersonPresenter(IMainView view)
+        public MainPresenter(IMainView view)
         {
             this.personsModel = new BindingList<PersonModel>();
-            this.personsModel.ListChanged += ListChanged;
+            this.personsModel.ListChanged += PersonsModel_ListChanged;
             this.mainView = view;
             this.mainView.Persons = this.personsModel;
         }
@@ -72,19 +73,6 @@ namespace AddressBookMVPDEMO.Presenters
                 return NearestPositiveAge(sortedpersons, ++index);
 
             return sortedpersons.ElementAt(index);
-        }
-        public PersonModel AddPerson(string name, DateTime birthday)
-        {
-            if (name == string.Empty)
-                throw new ArgumentException("Empty name textfield!");
-
-            if (birthday.Date > DateTime.Today)
-                throw new ArgumentException("Birthday exceeds today's date!");
-
-            PersonModel o = new PersonModel(name, birthday);
-            this.personsModel.Add(o);
-
-            return o;
         }
         public void RemovePerson(PersonModel person)
         {
@@ -157,7 +145,7 @@ namespace AddressBookMVPDEMO.Presenters
                 this.preparing = false;
             }
         }
-        private void ListChanged(object obj, ListChangedEventArgs eventArgs)
+        private void PersonsModel_ListChanged(object sender, ListChangedEventArgs e)
         {
             if (!this.preparing)
             {
@@ -172,6 +160,45 @@ namespace AddressBookMVPDEMO.Presenters
         public bool FileExists(string filename)
         {
             return File.Exists(filename);
+        }
+        #endregion
+    }
+
+    public class PersonPresenter
+    {
+        #region Properties & Fields
+        private readonly IPersonView personView;
+        private readonly BindingList<PersonModel> personsModel;
+
+        public PersonModel Person { get; set; }
+        #endregion
+
+        #region Constructor(s)
+        public PersonPresenter(IPersonView view, BindingList<PersonModel> personsmodel)
+        {
+            this.personsModel = personsmodel;
+            this.personView = view;
+        }
+        #endregion
+
+        #region Methods
+        public void AddPerson(string name, DateTime birthday)
+        {
+            PersonModel newPerson = new PersonModel(name, birthday);
+            this.personsModel.Add(newPerson);
+        }
+        public void EditPerson(string nameText, DateTime birthday)
+        {
+            this.Person.Name = nameText;
+            this.Person.Birthday = birthday;
+        }
+        public void UpdateUI()
+        {
+            if (this.Person != null)
+            {
+                this.personView.NameText = this.Person.Name;
+                this.personView.Birthday = this.Person.Birthday;
+            }
         }
         #endregion
     }

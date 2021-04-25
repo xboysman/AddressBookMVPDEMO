@@ -11,12 +11,12 @@ namespace AddressBookMVPDEMO
     public partial class Form_Main : Form, IMainView
     {
         #region Form
-        private PersonPresenter presenter;
+        private MainPresenter presenter;
         #region Constructor(s)
         public Form_Main()
         {
             InitializeComponent();
-            presenter = new PersonPresenter(this);
+            presenter = new MainPresenter(this);
 
             if (Settings.Default.SaveFilePath != string.Empty)
                 if (presenter.FileExists(Settings.Default.SaveFilePath))
@@ -58,6 +58,7 @@ namespace AddressBookMVPDEMO
         #region View Properties
         public BindingList<PersonModel> Persons
         {
+            get => (BindingList<PersonModel>)listBox_ListPersons.DataSource;
             set => listBox_ListPersons.DataSource = value;
         }
         public PersonModel SelectedPerson
@@ -89,7 +90,7 @@ namespace AddressBookMVPDEMO
         #region Buttons
         private void button_Add_Click(object sender, EventArgs e)
         {
-            Form_Person addPerson = new Form_Person(presenter);
+            Form_Person addPerson = new Form_Person(this.Persons);
             addPerson.ShowDialog();
         }
         private void button_Remove_Click(object sender, EventArgs e)
@@ -117,9 +118,7 @@ namespace AddressBookMVPDEMO
         {
             if (this.SelectedPerson != null)
             {
-                Form_Person editPerson = new Form_Person(presenter);
-                editPerson.NameText = this.SelectedPerson.Name;
-                editPerson.Birthday = this.SelectedPerson.Birthday;
+                Form_Person editPerson = new Form_Person(this.Persons, this.SelectedPerson);
                 editPerson.ShowDialog();
             }
         }
