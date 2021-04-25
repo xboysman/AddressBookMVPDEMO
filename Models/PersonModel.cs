@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using AddressBookMVPDEMO.Models.Interfaces;
 
 namespace AddressBookMVPDEMO.Models
 {
     [Serializable()]
-    public class PersonModel : ISerializable
+    public class PersonModel : IPersonModel
     {
         #region Property Fields
         public string Name { get; set; }
@@ -34,7 +35,6 @@ namespace AddressBookMVPDEMO.Models
 
             return age;
         }
-
         public int RemainingDays()
         {
             DateTime nextBirthday = Birthday.AddYears(CalculateAge() + 1);

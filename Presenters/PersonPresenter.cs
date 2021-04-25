@@ -6,6 +6,7 @@ using AddressBookMVPDEMO.Views;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using System.IO;
+using AddressBookMVPDEMO.Models.Interfaces;
 
 namespace AddressBookMVPDEMO.Presenters
 {
@@ -14,7 +15,7 @@ namespace AddressBookMVPDEMO.Presenters
         #region File/Folder Settings
 
         private const string subFolderName = "AddressBook";
-        private const string fileName = "ListPeople.xml";
+        private const string fileName = "Friends.xml";
         private static readonly string subFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), subFolderName);
         private static readonly string filePath  = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), subFolderName, fileName);
 
@@ -26,9 +27,9 @@ namespace AddressBookMVPDEMO.Presenters
 
         #region Property Fields
         private readonly IMainView mainView;
-        private BindingList<PersonModel> personsModel;  
+        private BindingList<IPersonModel> personsModel;  
         private PersonModel selectedPerson;
-        private BindingList<PersonModel> PersonsModel
+        private BindingList<IPersonModel> PersonsModel
         {
             get => personsModel;
             set 
@@ -53,7 +54,7 @@ namespace AddressBookMVPDEMO.Presenters
         #region Constructor(s)
         public PersonPresenter(IMainView view)
         {
-            this.personsModel = new BindingList<PersonModel>();
+            this.personsModel = new BindingList<IPersonModel>();
             this.mainView = view;
             this.mainView.Persons = this.personsModel;
         }
@@ -73,15 +74,15 @@ namespace AddressBookMVPDEMO.Presenters
             HasChanged = true;
             return o;
         }
-        public PersonModel FindClosest()
+        public IPersonModel FindClosest()
         {
-            IEnumerable<PersonModel> sortedPersons = this.personsModel.OrderBy(o => o.RemainingDays());
+            IEnumerable<IPersonModel> sortedPersons = this.personsModel.OrderBy(o => o.RemainingDays());
             if (sortedPersons.First().CalculateAge() == -1 && sortedPersons.Count() > 1)
                 return sortedPersons.ElementAt(1);
 
             return sortedPersons.First();
         }
-        public void RemovePerson(PersonModel person)
+        public void RemovePerson(IPersonModel person)
         {
             this.personsModel.Remove(person);
             this.SelectedPerson = null;
@@ -119,7 +120,7 @@ namespace AddressBookMVPDEMO.Presenters
         {
             XmlSerializer serializer = new XmlSerializer(typeof(BindingList<PersonModel>));
             using (FileStream fStream = File.OpenRead(pathfilename))
-                PersonsModel = (BindingList<PersonModel>)serializer.Deserialize(fStream);
+                PersonsModel = (BindingList<IPersonModel>)serializer.Deserialize(fStream);
 
             HasChanged = false;
         }
