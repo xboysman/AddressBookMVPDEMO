@@ -29,7 +29,6 @@ namespace AddressBookMVPDEMO
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Person));
             this.lbl_Name = new System.Windows.Forms.Label();
             this.lbl_Birthday = new System.Windows.Forms.Label();
             this.button_OK = new System.Windows.Forms.Button();
@@ -83,7 +82,7 @@ namespace AddressBookMVPDEMO
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Image = global::AddressBookMVPDEMO.Properties.Resources.concact;
             this.pictureBox1.Location = new System.Drawing.Point(71, 12);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(215, 197);
@@ -91,7 +90,7 @@ namespace AddressBookMVPDEMO
             this.pictureBox1.TabIndex = 5;
             this.pictureBox1.TabStop = false;
             // 
-            // Form_EditPerson
+            // Form_Person
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -104,7 +103,7 @@ namespace AddressBookMVPDEMO
             this.Controls.Add(this.lbl_Name);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.Name = "Form_EditPerson";
+            this.Name = "Form_Person";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Edit Person";
             this.Shown += new System.EventHandler(this.Form_Person_Shown);

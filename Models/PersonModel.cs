@@ -26,6 +26,11 @@ namespace AddressBookMVPDEMO.Models
         }
         #endregion
 
+        public IPersonModel CreateNewPerson(string name, DateTime birthday)
+        {
+            PersonModel person = new PersonModel(name, birthday);
+            return person;
+        }
         public int CalculateAge()
         {
             DateTime today = DateTime.Today;

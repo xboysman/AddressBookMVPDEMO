@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using AddressBookMVPDEMO.Models;
-using AddressBookMVPDEMO.Views;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using System.IO;
 using AddressBookMVPDEMO.Models.Interfaces;
+using AddressBookMVPDEMO.Views;
+using AddressBookMVPDEMO.Models;
+using System.Xml.Schema;
+using System.Xml;
 
 namespace AddressBookMVPDEMO.Presenters
 {
@@ -17,7 +19,7 @@ namespace AddressBookMVPDEMO.Presenters
         private const string subFolderName = "AddressBook";
         private const string fileName = "Friends.xml";
         private static readonly string subFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), subFolderName);
-        private static readonly string filePath  = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), subFolderName, fileName);
+        private static readonly string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), subFolderName, fileName);
 
         public string SubFolderName { get => subFolderName; }
         public string FileName { get => fileName; }
@@ -27,31 +29,32 @@ namespace AddressBookMVPDEMO.Presenters
 
         #region Property Fields
         private readonly IMainView mainView;
-        private BindingList<IPersonModel> personsModel;  
-        private PersonModel selectedPerson;
+        private BindingList<IPersonModel> personsModel;
+        private IPersonModel selectedPerson;
+
         private BindingList<IPersonModel> PersonsModel
         {
             get => personsModel;
-            set 
+            set
             {
                 this.personsModel = value;
                 UpdateUI();
             }
         }
-        public PersonModel SelectedPerson
+        public IPersonModel SelectedPerson
         {
             get => selectedPerson;
-            set 
+            set
             {
                 this.selectedPerson = value;
                 UpdateUI();
             }
         }
-
         public bool HasChanged { get; private set; } = false;
         #endregion
 
         #region Constructor(s)
+        public PersonPresenter() { }
         public PersonPresenter(IMainView view)
         {
             this.personsModel = new BindingList<IPersonModel>();
@@ -60,7 +63,7 @@ namespace AddressBookMVPDEMO.Presenters
         }
         #endregion
 
-        public PersonModel AddPerson(string name, DateTime birthday)
+        public IPersonModel AddPerson(string name, DateTime birthday)
         {
             if (name == string.Empty)
                 throw new ArgumentException("Empty name textfield!");
@@ -68,7 +71,7 @@ namespace AddressBookMVPDEMO.Presenters
             if (birthday.Date > DateTime.Today)
                 throw new ArgumentException("Birthday exceeds today's date!");
 
-            PersonModel o = new PersonModel(name, birthday);
+            IPersonModel o = new PersonModel(name, birthday);
             this.personsModel.Add(o);
 
             HasChanged = true;
@@ -112,13 +115,13 @@ namespace AddressBookMVPDEMO.Presenters
         }
         public void SaveToXML(string pathfilename)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(BindingList<PersonModel>));
+            XmlSerializer serializer = new XmlSerializer(typeof(IPersonModel));
             using (FileStream fStream = File.Create(pathfilename))
                 serializer.Serialize(fStream, PersonsModel);
         }
         public void LoadXML(string pathfilename)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(BindingList<PersonModel>));
+            XmlSerializer serializer = new XmlSerializer(typeof(IPersonModel));
             using (FileStream fStream = File.OpenRead(pathfilename))
                 PersonsModel = (BindingList<IPersonModel>)serializer.Deserialize(fStream);
 

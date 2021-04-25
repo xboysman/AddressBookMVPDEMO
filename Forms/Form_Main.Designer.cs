@@ -29,7 +29,6 @@ namespace AddressBookMVPDEMO
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Main));
             this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
             this.lbl_Today = new System.Windows.Forms.Label();
             this.lbl_NearestBirthday = new System.Windows.Forms.Label();
@@ -134,7 +133,7 @@ namespace AddressBookMVPDEMO
             // 
             this.button_Add.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button_Add.AutoSize = true;
-            this.button_Add.Image = ((System.Drawing.Image)(resources.GetObject("button_Add.Image")));
+            this.button_Add.Image = global::AddressBookMVPDEMO.Properties.Resources.add;
             this.button_Add.Location = new System.Drawing.Point(12, 289);
             this.button_Add.Name = "button_Add";
             this.button_Add.Size = new System.Drawing.Size(115, 40);
@@ -148,7 +147,7 @@ namespace AddressBookMVPDEMO
             // 
             this.button_Remove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button_Remove.AutoSize = true;
-            this.button_Remove.Image = ((System.Drawing.Image)(resources.GetObject("button_Remove.Image")));
+            this.button_Remove.Image = global::AddressBookMVPDEMO.Properties.Resources.remove;
             this.button_Remove.Location = new System.Drawing.Point(133, 289);
             this.button_Remove.Name = "button_Remove";
             this.button_Remove.Size = new System.Drawing.Size(115, 40);

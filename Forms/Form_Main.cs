@@ -2,8 +2,8 @@
 using System.Windows.Forms;
 using System.ComponentModel;
 using AddressBookMVPDEMO.Views;
-using AddressBookMVPDEMO.Models;
 using AddressBookMVPDEMO.Presenters;
+using AddressBookMVPDEMO.Models.Interfaces;
 
 namespace AddressBookMVPDEMO
 {
@@ -22,12 +22,12 @@ namespace AddressBookMVPDEMO
 
         #region View Properties
 
-        public PersonModel SelectedPerson
+        public IPersonModel SelectedPerson
         {
-            get => (PersonModel)listBox_ListPersons.SelectedItem;
+            get => (IPersonModel)listBox_ListPersons.SelectedItem;
             set => listBox_ListPersons.SelectedItem = value;
         }
-        public BindingList<PersonModel> Persons
+        public BindingList<IPersonModel> Persons
         {
             set => listBox_ListPersons.DataSource = value;
         }
@@ -81,10 +81,13 @@ namespace AddressBookMVPDEMO
         }
         private void listBox_ListPersons_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            Form_Person editPerson = new Form_Person(presenter);
-            editPerson.NameText = this.SelectedPerson.Name;
-            editPerson.Birthday = this.SelectedPerson.Birthday;
-            editPerson.ShowDialog();
+            if (this.SelectedPerson != null)
+            {
+                Form_Person editPerson = new Form_Person(presenter);
+                editPerson.NameText = this.SelectedPerson.Name;
+                editPerson.Birthday = this.SelectedPerson.Birthday;
+                editPerson.ShowDialog();
+            }
         }
 
         #endregion
